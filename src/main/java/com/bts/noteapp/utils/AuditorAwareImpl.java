@@ -1,15 +1,20 @@
 package com.bts.noteapp.utils;
 
-import com.bts.noteapp.models.entities.UserDAO;
-import org.springframework.data.domain.AuditorAware;
-
 import java.util.Optional;
 
-public class AuditorAwareImpl  {
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
-//    @Override
-//    public Optional<String> getCurrentAuditor() {
-//        UserDAO currentUser = (UserDAO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        return Optional.of(currentUser.getEmail());
-//    }
+public class AuditorAwareImpl implements AuditorAware<String> {
+
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			String username = ((UserDetails) principal).getUsername();
+			return Optional.of(username);
+		}
+		return null;
+	}
 }

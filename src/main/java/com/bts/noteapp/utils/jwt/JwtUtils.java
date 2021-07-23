@@ -49,12 +49,14 @@ public class JwtUtils {
 	
 	public String generateRefreshToken(Map<String, Object> claims, String subject) {
 		
-		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+		String refreshToken = Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + refreshExpirationDateInMs))
 				.signWith(SignatureAlgorithm.HS512, secretKey).compact();
+		return refreshToken;
 	}
 	
 	public boolean validateToken(String authToken) {
+		
 		try {
 			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
 			return true;

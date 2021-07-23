@@ -16,12 +16,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.bts.noteapp.services.CustomUserDetailsService;
 
 
+
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	CustomUserDetailsService userDetailsService;
+	private CustomUserDetailsService userDetailsService;
 	
 	@Autowired
 	private CustomJwtAuthenticationFilter customJwtAuthenticationFilter;
@@ -48,7 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
-		http.authorizeRequests()
+		http.csrf().disable().authorizeRequests()
 		.antMatchers("/api/v1/register", "/api/v1/login").permitAll()
 		.anyRequest().authenticated()
 		.and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
